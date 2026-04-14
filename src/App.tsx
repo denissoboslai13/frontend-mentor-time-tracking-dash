@@ -10,6 +10,7 @@ import iconExercise from '../images/icon-exercise.svg'
 import iconSocial from '../images/icon-social.svg'
 import iconSelfCare from '../images/icon-self-care.svg'
 import { AnimatePresence, motion } from 'motion/react'
+import backupData from '../db.json'
 
 const Categories = ({ title, icon, timeframes, color, time }) => {
   return (
@@ -55,12 +56,28 @@ const colors = ['#ff8c66', '#56c2e6', '#ff5c7c', '#4acf81', '#7536d3', '#f1c65b'
 function App() {
   const [categories, setCategories] = useState(0)
   const [time, setTime] = useState('day')
+  const [live, setLive] = useState(false)
 
   useEffect(() => {
-    axios.get('https://frontend-mentor-time-tracking-dash-production.up.railway.app/categories').then(response => {
-    console.log(response.data)
-    setCategories(response.data)
-  })}, []);
+    axios
+    .get('https://frontend-mentor-time-tracking-dash-production.up.railway.app/categories')
+    .then(response => { 
+      console.log(response)
+      setCategories(response.data)
+      console.log('successful')
+      setLive(true)
+    })
+    .catch(
+      error => {
+        console.log(error)
+        console.log('unsuccessful')
+        setCategories(backupData.categories)
+        setLive(false)
+      }
+    )
+  }, []);
+
+  console.log('backup: ', backupData.categories)
 
   return (
     <div className='w-full flex justify-center align-center lg:mt-20'>
@@ -73,6 +90,9 @@ function App() {
             <div>
               <p className='text-lg lg:text-lg text-[#bdc1ff] font-extralight'>Report for</p>
               <p className='text-2xl lg:text-5xl text-white font-light'>Jeremy Robson</p>
+            </div>
+            <div className={`${live === false ? 'bg-red-600' : 'bg-green-600'} absolute w-[10px] h-[10px] rounded-full right-6 top-6 border border-white`}>
+
             </div>
           </div>
           <div className='bg-[#1c1f4a] flex flex-row lg:flex-col gap-5 justify-evenly lg:justify-start rounded-xl py-10 pb-5 lg:pb-6 lg:pt-10 lg:px-6 -mt-5 z-10 relative text-[#6f76c8]'>
