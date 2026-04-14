@@ -1,34 +1,51 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import axios from 'axios'
-import imgJeremy from '../../images/image-jeremy.png'
-import iconEllipsis from '../../images/icon-ellipsis.svg'
-import iconWork from '../../images/icon-work.svg'
-import iconPlay from '../../images/icon-play.svg'
-import iconStudy from '../../images/icon-study.svg'
-import iconExercise from '../../images/icon-exercise.svg'
-import iconSocial from '../../images/icon-social.svg'
-import iconSelfCare from '../../images/icon-self-care.svg'
+import imgJeremy from '../images/image-jeremy.png'
+import iconEllipsis from '../images/icon-ellipsis.svg'
+import iconWork from '../images/icon-work.svg'
+import iconPlay from '../images/icon-play.svg'
+import iconStudy from '../images/icon-study.svg'
+import iconExercise from '../images/icon-exercise.svg'
+import iconSocial from '../images/icon-social.svg'
+import iconSelfCare from '../images/icon-self-care.svg'
+import { AnimatePresence, motion } from 'motion/react'
 
 const Categories = ({ title, icon, timeframes, color, time }) => {
   return (
-    <div className='h-full flex flex-col w-full'>
-      <div className='rounded-xl flex flex-col items-end overflow-hidden relative w-full h-15' style={{backgroundColor: color}}>
-        <img src={icon} alt="icon-work" className='absolute -top-3 right-3' />
+      <div className='h-full flex flex-col w-full'>
+        <div className='rounded-xl flex flex-col items-end overflow-hidden relative w-full h-15' style={{backgroundColor: color}}>
+          <img src={icon} alt="icon-work" className='absolute -top-3 right-3' />
+        </div>
+        <div className='bg-[#1c1f4a] hover:bg-[#34397b] duration-300 flex flex-col p-6 rounded-xl -mt-7 lg:-mt-5 relative flex-grow'>
+          <div className='flex flex-col justify-between items-start'>
+            <p className='text-white lg:mb-7'>{title}</p>
+            <AnimatePresence mode='wait'>
+              <motion.div
+              key={`${time}-current`}
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 5 }}
+              transition={{ duration: 0.3 }}>
+                <p className='text-3xl lg:text-6xl text-white font-light'>{time === 'day' ? timeframes.daily.current : time === 'week' ? timeframes.weekly.current : timeframes.monthly.current}hrs</p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          <div className='absolute right-7 top-8'>
+            <img src={iconEllipsis} alt="icon-ellipsis" />
+          </div>
+          <AnimatePresence mode='wait'>
+            <motion.div className='absolute bottom-7 right-7 lg:left-7'
+              key={`${time}-current`}
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 5 }}
+              transition={{ duration: 0.3 }}>
+              <p className='text-sm text-[#bdc1ff]'>{time === 'day' ? 'Yesterday' : `Last ${time}`} - {time === 'day' ? timeframes.daily.previous : time === 'week' ? timeframes.weekly.previous : timeframes.monthly.previous}hrs</p>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
-      <div className='bg-[#1c1f4a] hover:bg-[#34397b] duration-300 flex flex-col p-6 rounded-xl -mt-7 lg:-mt-5 relative flex-grow'>
-        <div className='flex flex-col justify-between items-start'>
-          <p className='text-white lg:mb-7'>{title}</p>
-          <p className='text-3xl lg:text-6xl text-white font-light'>{time === 'day' ? timeframes.daily.current : time === 'week' ? timeframes.weekly.current : timeframes.monthly.current}hrs</p>
-        </div>
-        <div className='absolute right-7 top-8'>
-          <img src={iconEllipsis} alt="icon-ellipsis" />
-        </div>
-        <div className='absolute bottom-7 right-7 lg:left-7'>
-          <p className='text-sm text-[#bdc1ff]'>{time === 'day' ? 'Yesterday' : `Last ${time}`} - {time === 'day' ? timeframes.daily.previous : time === 'week' ? timeframes.weekly.previous : timeframes.monthly.previous}hrs</p>
-        </div>
-      </div>
-    </div>
   )
 }
 
