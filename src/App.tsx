@@ -57,7 +57,7 @@ function App() {
   const [time, setTime] = useState('day')
 
   useEffect(() => {
-    axios.get('http://localhost:3001/categories').then(response => {
+    axios.get('https://frontend-mentor-time-tracking-dash-production.up.railway.app/categories').then(response => {
     console.log(response.data)
     setCategories(response.data)
   })}, []);
